@@ -34,7 +34,7 @@ def get_points():
 
 @app.route('/random')
 def rand():
-    return "this was returned: {}".format(random())
+    return "this was returned: {}".format(random.random())
 
 
 if __name__ == '__main__':
