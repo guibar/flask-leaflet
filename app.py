@@ -1,4 +1,5 @@
 import random
+
 from geopandas import GeoDataFrame
 from flask import Flask, request, render_template
 from shapely.geometry import Polygon, Point
@@ -29,24 +30,6 @@ def get_points():
 
     gdf_points = GeoDataFrame(point_list, columns=['draggable', 'geometry'])
     return gdf_points.to_json()
-
-
-def get_random_vehicles_from_box(size: int, seed=None, on_node=False) -> Dict[int, Vehicle]:
-    random.seed(seed)
-    vehicles = {}
-    while len(vehicles) < size:
-        random_point: Point = OsmGraph().get_random_point_in_boundary()
-        (u, v, key, geom) = get_nearest_edge(OsmGraph().graph, (random_point.y, random_point.x),
-                                             return_geom=True, return_dist=False)
-        if on_node:
-            edge_cursor = 0
-        else:
-            edge_cursor = random.random()
-        point_on_edge = geom.interpolate(geom.length * edge_cursor)
-
-        v_id = random.randint(1000, 10000)
-        vehicles[v_id] = Vehicle(v_id, point_on_edge.x, point_on_edge.y, u=u, v=v, edge_cursor=edge_cursor)
-    return vehicles
 
 
 @app.route('/random')
