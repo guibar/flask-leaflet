@@ -2,9 +2,10 @@ from random import random
 from geopandas import GeoDataFrame
 from flask import Flask, request, render_template
 from shapely.geometry import Polygon
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 
 
 @app.route('/json', methods=['GET', 'POST'])
@@ -19,11 +20,10 @@ def add_message():
     return gdf_poly.to_json()
 
 
-
-
 @app.route('/random')
 def rand():
     return "this was returned: {}".format(random())
+
 
 if __name__ == '__main__':
     app.run()
